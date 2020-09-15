@@ -1,5 +1,9 @@
 @extends('Front.master')
+@section('style')
+    <style>
 
+    </style>
+    @endsection
 @section('body')
 
     <!-- ***** Breadcumb Area Start ***** -->
@@ -112,7 +116,7 @@
                                 <!-- Post Thumbnail -->
                                 <div class="blog-post-thumbnail">
                                     @if($hospital->featureImage($hospital->id))
-                                    <img src="{{asset('/websiteimages/')}}/{{$hospital->featureImage($hospital->id)->image}}" alt="">
+                                    <img class="img-thumbnail" src="{{asset('/websiteimages/')}}/{{$hospital->featureImage($hospital->id)->image}}" alt="">
                                     @endif
                                     <!-- Post Date -->
                                 </div>
@@ -122,14 +126,13 @@
                             <div class="single-blog-area bg-gray mb-50">
                                 <!-- Post Content -->
                                 <div class="post-content">
-                                    <div class="post-author">
-                                        <a href="#"><img src="{{asset('/asset/')}}/img/blog-img/p1.jpg" alt=""></a>
-                                    </div>
-                                    <a href="#" class="headline">{{$hospital->hospital_name}}</a>
+                                    <a href="{{url('/hospital-details/'.$hospital->slug)}}" class="headline">{{$hospital->hospital_name}}</a>
                                     <p> <i class="fa fa-hospital-o" aria-hidden="true"></i> Establisehd In: {{$hospital->established_in}}</p>
                                     <p> <i class="fa fa-bed" aria-hidden="true"></i> Number Of Bed: {{$hospital->number_of_beds}}</p>
                                     <p> <i class="fa fa-certificate" aria-hidden="true"></i> Speciality: {{$hospital->speciality}}</p>
-                                    <p>{!! $hospital->about !!}</p>
+                                    <div>
+                                    <a href="{{url('/hospital-details/'.$hospital->slug)}}">Show More..</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -274,5 +277,39 @@
         </div>
     </footer>
     <!-- ***** Footer Area End ***** -->
+<script>
+    $(document).ready(function() {
+        var showChar = 100;
+        var ellipsestext = "...";
+        var moretext = "more";
+        var lesstext = "less";
+        $('.more').each(function() {
+            var content = $(this).html();
 
+            if(content.length > showChar) {
+
+                var c = content.substr(0, showChar);
+                var h = content.substr(showChar-1, content.length - showChar);
+
+                var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+                $(this).html(html);
+            }
+
+        });
+
+        $(".morelink").click(function(){
+            if($(this).hasClass("less")) {
+                $(this).removeClass("less");
+                $(this).html(moretext);
+            } else {
+                $(this).addClass("less");
+                $(this).html(lesstext);
+            }
+            $(this).parent().prev().toggle();
+            $(this).prev().toggle();
+            return false;
+        });
+    });
+</script>
 @endsection
